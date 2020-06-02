@@ -122,7 +122,7 @@ while read -r line; do
 
     oci iam compartment create --name $NOME --compartment-id $COMPARMENT_RAIZ --description "Compartment $COMPNAME" --profile $PROFILE
 
-    sleep 10; #Tempo necessario para validacao da criacao do compartment
+    sleep 25; #Tempo necessario para validacao da criacao do compartment
    
     export COMP=$(oci iam compartment list --output table --query 'data [*].{id:id,name:name}' --profile $PROFILE | grep $NOME | awk '{print $2}')
 
