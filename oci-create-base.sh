@@ -2,6 +2,7 @@
 set +x
 
 read -p "Set Profile =" PROFILE
+read -p "Comparment RAIZ =" COMPARMENT_RAIZ
 
 count=0
 countsubpriv=0
@@ -119,8 +120,10 @@ while read -r line; do
     echo "Range VCN = " $VCNRANGE
     echo "Compartment = " $NOME
 
-    oci iam compartment create --name $NOME --compartment-id ocid1.tenancy.oc1..aaaaaaaax6twrqsbdtezcr5txzu2sjme7jrghur55352376hkgqn74w2kwbq --description "Compartment $COMPNAME" --profile $PROFILE
+    oci iam compartment create --name $NOME --compartment-id $COMPARMENT_RAIZ --description "Compartment $COMPNAME" --profile $PROFILE
 
+    sleep 10; #Tempo necessario para validacao da criacao do compartment
+   
     export COMP=$(oci iam compartment list --output table --query 'data [*].{id:id,name:name}' --profile $PROFILE | grep $NOME | awk '{print $2}')
 
     echo "Compartment id = "$COMP
