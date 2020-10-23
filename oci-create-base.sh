@@ -47,7 +47,7 @@ function subnet-priv() {
 
         echo "criando Subnet $PRIVSUB------------" 
 
-        oci network subnet create --cidr-block $IPPRIVSUB --compartment-id $COMP --vcn-id $VCN --route-table-id $RTprivID --prohibit-public-ip-on-vnic true --security-list-ids '['\"$SLprivID\"']' --display-name $PRIVSUB --profile $PROFILE
+        oci network subnet create --cidr-block $IPPRIVSUB --compartment-id $COMP   --dns-label sub$PRIVSUB --vcn-id $VCN --route-table-id $RTprivID --prohibit-public-ip-on-vnic true --security-list-ids '['\"$SLprivID\"']' --display-name $PRIVSUB --profile $PROFILE
 
         export SubnetprivID=$(oci network subnet list --compartment-id $COMP --vcn-id $VCN --output table --query 'data [*].{id:id,"display-name":"display-name"}' --profile $PROFILE | grep $PRIVSUB | awk '{print $4}')
 
@@ -92,7 +92,7 @@ function subnet-pub() {
 
         echo "criando Subnet $PUBSUB------------" 
 
-        oci network subnet create --cidr-block $IPPUBSUB --compartment-id $COMP --vcn-id $VCN --route-table-id $RTID --security-list-ids '['\"$SLID\"']' --display-name $PUBSUB --profile $PROFILE
+        oci network subnet create --cidr-block $IPPUBSUB --compartment-id $COMP --vcn-id $VCN --route-table-id $RTID --security-list-ids '['\"$SLID\"']' --display-name $PUBSUB --dns-label sub$PUBSUB--profile $PROFILE
 
         export SubnetID=$(oci network subnet list --compartment-id $COMP --vcn-id $VCN --output table --query 'data [*].{id:id,"display-name":"display-name"}' --profile $PROFILE | grep $PUBSUB | awk '{print $4}')
 
@@ -129,7 +129,7 @@ while read -r line; do
     echo "Compartment id = "$COMP
 
     echo "criando VCN ------------" 
-    oci network vcn create --compartment-id $COMP --cidr-block $VCNRANGE --display-name VCN-$COMPNAME --profile $PROFILE
+    oci network vcn create --compartment-id $COMP --cidr-block $VCNRANGE  --dns-label vcn$COMPNAME --display-name VCN-$COMPNAME --profile $PROFILE
 
     export VCN=$(oci network vcn list --compartment-id $COMP --output table --query 'data [*].{id:id,"display-name":"display-name"}' --profile $PROFILE | grep VCN-$COMPNAME | awk '{print $4}')
 
